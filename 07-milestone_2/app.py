@@ -1,5 +1,4 @@
-from models.book import Book
-from models.shelf import Shelf
+from utils.database import Database
 
 USER_CHOICE = """
 Enter: 
@@ -7,10 +6,12 @@ Enter:
 - "l" to list all books
 - "r" to mark book as read
 - "d" to delete a book
+- "g" to get a book by name
 - "q" to quit
 """
 
-shelv = Shelf()
+db = Database("data.db")
+db.create_book_table()
 
 
 def menu():
@@ -18,24 +19,26 @@ def menu():
     while user_input != "q":
 
         if user_input == "l":
-            print(shelv.list_books())
+            books = db.list()
+            print(books)
 
         if user_input == "a":
             name = input("Book Name: ").strip()
             author = input("Book Author's Name: ").strip()
+            db.add(name, author)
 
-            if shelv.add_book(name, author):
-                print(f"Added {name} by {author} successfully!")
+        if user_input == "g":
+            name = input("Book Name: ").strip()
+            book = db.get(name)
+            print(book)
 
         if user_input == "r":
             name = input("Book Name: ").strip()
-            if shelv.mark_book_read(name):
-                print(f"Updated {name}")
+            db.mark_read(name)
 
         if user_input == "d":
             name = input("Book Name: ").strip()
-            if shelv.delete_book(name):
-                print(f"Deleted {name} successfully.")
+            db.delete(name)
 
         user_input = input(USER_CHOICE)
 
