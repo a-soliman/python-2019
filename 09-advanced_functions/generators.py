@@ -10,9 +10,11 @@ class FirstHundredGenerator:
         else:
             raise StopIteration()
 
+    def __iter__(self):
+        return self
 
-g = FirstHundredGenerator()
 
-print(next(g))
-print(next(g))
-print(next(g))
+print(sum(FirstHundredGenerator()))
+
+for i in FirstHundredGenerator():
+    print(i)
